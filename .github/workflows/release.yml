@@ -1,0 +1,76 @@
+name: Release Obsidian Plugin
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build plugin
+        run: npm run build:plugin
+
+      - name: Get version from manifest
+        id: get_version
+        run: |
+          VERSION=$(node -p "require('./manifest.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Plugin version: $VERSION"
+
+      - name: Verify build files exist
+        run: |
+          if [ ! -f main.js ]; then
+            echo "Error: main.js not found"
+            exit 1
+          fi
+          if [ ! -f manifest.json ]; then
+            echo "Error: manifest.json not found"
+            exit 1
+          fi
+          if [ ! -f versions.json ]; then
+            echo "Error: versions.json not found"
+            exit 1
+          fi
+          echo "All required files found"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            main.js
+            manifest.json
+            versions.json
+          name: Release ${{ steps.get_version.outputs.version }}
+          draft: false
+          prerelease: false
+          body: |
+            ## MD2Card Obsidian Plugin ${{ steps.get_version.outputs.version }}
+
+            ### Installation
+
+            1. Download `main.js`, `manifest.json`, and `versions.json`
+            2. Create a folder `md2card` in your vault's `.obsidian/plugins/` directory
+            3. Copy the downloaded files into the folder
+            4. Reload Obsidian and enable the plugin
+
+            ### Files
+
+            - `main.js` - Plugin code
+            - `manifest.json` - Plugin metadata
+            - `versions.json` - Version compatibility
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
