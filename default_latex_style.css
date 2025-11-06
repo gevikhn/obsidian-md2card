@@ -1,0 +1,296 @@
+/* =========================================
+md2card - LaTeX Journal Style (closer to typora-latex-theme)
+Focus: booktabs “三线表” + cleaner TeX-like typography
+Scope anchor: .card
+========================================= */
+
+/* ---------- Base palette & typography ---------- */
+.card {
+--paper: #fbfbfb;
+--ink: #202124;
+--muted: #5b5f6a;
+--rule: #d9d9de;
+--accent: #0f4c81;
+
+--code-bg: #f6f7f9;
+--code-border: #e6e7ec;
+
+background: var(--paper);
+color: var(--ink);
+border: 1px solid var(--rule);
+border-radius: 8px;
+box-shadow: 0 2px 10px rgba(0,0,0,.05);
+font-family: "CMU Serif","Latin Modern Roman","Times New Roman",STSong,serif;
+line-height: 1.65;
+letter-spacing: .003em;
+}
+
+.card .card-content { padding: 36px 44px; }
+@media (min-width: 880px) { .card .card-content { padding: 48px 64px; } }
+
+.card .card-header,
+.card .card-footer { height: 18px; position: relative; }
+.card .card-header::after,
+.card .card-footer::before {
+content: "";
+position: absolute; left: 44px; right: 44px; border-top: 1px solid var(--rule);
+}
+@media (min-width: 880px) {
+.card .card-header::after,
+.card .card-footer::before { left:64px; right:64px; }
+}
+
+/* ---------- Content area ---------- */
+.card .card-content-inner {
+max-width: 72ch;
+margin: 0 auto;
+counter-reset: sec subsec subsubsec fig tbl eq;
+font-variant-numeric: oldstyle-nums;
+}
+
+/* Title block (centered, understated like LaTeX article) */
+.card .card-content-inner > h1 {
+margin: 0 0 .3rem;
+text-align: center;
+font-weight: 700;
+font-size: clamp(26px, 3.2vw, 34px);
+}
+.card .card-content-inner > h2[data-text]{
+text-align: center;
+color: var(--muted);
+font-size: clamp(15px, 1.8vw, 18px);
+font-variant: small-caps;
+letter-spacing: .06em;
+margin: .2rem 0 1.2rem;
+}
+.card .card-content-inner > h1::after{
+content:"";
+display:block;
+width:80px;
+margin:.6rem auto 0;
+border-top:1.5px solid var(--rule);
+opacity:.6;
+}
+
+/* Section headings with LaTeX-like numbering */
+.card .card-content-inner h2:not([data-text]),
+.card .card-content-inner h3,
+.card .card-content-inner h4 {
+color: var(--ink);
+font-weight: 700;
+margin: 1.6rem 0 .6rem;
+}
+.card .card-content-inner h2:not([data-text]){ counter-increment: sec; counter-reset: subsec; font-size: 20px; }
+.card .card-content-inner h2:not([data-text])::before{ content: counter(sec) ". "; color: var(--accent); }
+.card .card-content-inner h3{ counter-increment: subsec; counter-reset: subsubsec; font-size: 18px; }
+.card .card-content-inner h3::before{ content: counter(sec) "." counter(subsec) " "; color: var(--accent); }
+.card .card-content-inner h4{ counter-increment: subsubsec; font-size: 16px; font-style: italic; }
+.card .card-content-inner h4::before{ content: counter(sec) "." counter(subsec) "." counter(subsubsec) " "; color: var(--accent); }
+
+/* Paragraphs */
+.card .card-content-inner > p { margin: 0 0 .8rem; text-align: justify; hyphens: auto; }
+.card .card-content-inner em { font-style: italic; }
+.card .card-content-inner strong { font-weight: 700; }
+
+/* Blockquote (plain, TeX-like) */
+.card .card-content-inner blockquote{
+margin: 1rem 0;
+padding: .6rem .9rem;
+border-left: 3px solid #c2c9d6;
+background: linear-gradient(90deg, rgba(194,201,214,.12), transparent 55%);
+}
+.card .card-content-inner blockquote > :first-child{ margin-top:0; }
+.card .card-content-inner blockquote > :last-child{ margin-bottom:0; }
+
+/* Lists */
+.card .card-content-inner ol,
+.card .card-content-inner ul { margin: .4rem 0 .9rem; padding-left: 1.2rem; }
+.card .card-content-inner li { margin: .15rem 0; }
+.card .card-content-inner li::marker{ color: var(--muted); }
+
+/* Code */
+.card .card-content-inner code,
+.card .card-content-inner pre{
+font-family: "Cascadia Code","JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+font-size: .92em;
+}
+.card .card-content-inner code{
+background: var(--code-bg);
+border: 1px solid var(--code-border);
+padding: .12em .32em;
+border-radius: 4px;
+}
+.card .card-content-inner pre{
+background: var(--code-bg);
+border: 1px solid var(--code-border);
+padding: .85rem 1rem;
+border-radius: 6px;
+overflow: auto;
+}
+.card .card-content-inner pre code{ background: transparent; border: 0; padding: 0; }
+
+/* Links */
+.card .card-content-inner a{
+color: var(--accent);
+text-decoration-thickness: .08em;
+text-underline-offset: .14em;
+}
+.card .card-content-inner a:hover{ text-decoration: underline; }
+
+/* Horizontal rule */
+.card .card-content-inner hr{
+border: 0;
+border-top: 1px solid var(--rule);
+margin: 1rem 0;
+}
+
+/* ---------- Figures & captions ---------- */
+.card .card-content-inner figure{
+margin: 1rem auto;
+text-align: center;
+counter-increment: fig;
+}
+.card .card-content-inner figure > img,
+.card .card-content-inner figure > video{
+max-width: 100%;
+border: 1px solid var(--rule);
+border-radius: 4px;
+}
+.card .card-content-inner figure > figcaption{
+margin-top: .5rem;
+font-size: .92em;
+color: var(--muted);
+}
+.card .card-content-inner figure > figcaption::before{
+content: "Figure " counter(fig) ". ";
+font-weight: 600;
+color: var(--ink);
+}
+
+/* ---------- Math (KaTeX/MathJax friendly) ---------- */
+.card .card-content-inner .katex-display,
+.card .card-content-inner .MathJax_Display { margin: .8rem 0; text-align: center; }
+.card .card-content-inner .katex-display > .katex { font-size: 1.08em; }
+.card .card-content-inner .katex { color: var(--ink); }
+
+/* Optional equation number wrapper */
+.card .card-content-inner .equation{
+display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px;
+counter-increment: eq; margin: .8rem 0;
+}
+.card .card-content-inner .equation::after{
+content: "(" counter(eq) ")";
+color: var(--muted); font-size: .95em;
+}
+
+/* ---------- TABLES: booktabs “三线表” ---------- */
+/* Reset & base */
+.card .card-content-inner table{
+width: 100%;
+border-collapse: collapse;
+margin: 1rem 0 1.2rem;
+font-size: .96em;
+line-height: 1.55;
+table-layout: auto;
+/* No vertical rules = booktabs style */
+}
+.card .card-content-inner table *{
+border: 0; /* remove all default borders */
+}
+
+/* Caption (top, italic like LaTeX) with auto numbering */
+.card .card-content-inner table { counter-increment: tbl; }
+.card .card-content-inner table > caption{
+caption-side: top;
+text-align: left;
+margin-bottom: .4rem;
+color: var(--muted);
+font-style: italic;
+}
+.card .card-content-inner table > caption::before{
+content: "Table " counter(tbl) ". ";
+font-style: normal; font-weight: 600; color: var(--ink);
+}
+
+/* Top rule (≈ \toprule) */
+.card .card-content-inner thead tr:first-child th,
+.card .card-content-inner thead tr:first-child td{
+border-top: 2px solid var(--ink);
+}
+
+/* Header cells — no vertical rules, just spacing */
+.card .card-content-inner thead th,
+.card .card-content-inner thead td{
+padding: .45rem .55rem .5rem;
+font-weight: 700;
+text-align: left;
+vertical-align: bottom;
+}
+
+/* Mid rule (≈ \midrule) after header */
+.card .card-content-inner thead tr:last-child th,
+.card .card-content-inner thead tr:last-child td{
+border-bottom: 1px solid var(--ink);
+}
+
+/* Body cells — no inner row rules (booktabs discourages too many lines) */
+.card .card-content-inner tbody td{
+padding: .45rem .55rem;
+vertical-align: baseline;
+}
+
+/* Optional light row separators (disabled by default) */
+/* .card .card-content-inner tbody tr + tr td { border-top: 1px solid var(--rule); } */
+
+/* Bottom rule (≈ \bottomrule) on last body row */
+.card .card-content-inner tbody tr:last-child td{
+border-bottom: 2px solid var(--ink);
+}
+
+/* Foot rows (if present) sit above bottom rule */
+.card .card-content-inner tfoot td{
+padding: .5rem .55rem;
+font-style: italic;
+border-top: 1px solid var(--ink); /* like an extra midrule above foot */
+}
+
+/* Numerical alignment helpers (if you add classes in Markdown/HTML) */
+.card .card-content-inner td.num{ text-align: right; font-variant-numeric: tabular-nums; }
+.card .card-content-inner td.center{ text-align: center; }
+
+/* ---------- References / Footnotes ---------- */
+.card .card-content-inner .references,
+.card .card-content-inner .footnotes{
+margin-top: 1.2rem; padding-top: .8rem; border-top: 1px solid var(--rule);
+}
+.card .card-content-inner .references p,
+.card .card-content-inner .footnotes p{
+margin: .35rem 0;
+text-indent: -1.2em; padding-left: 1.2em; font-size: .96em;
+}
+
+/* ---------- Don’t touch embedded SVG/Mermaid ---------- */
+.card .card-content-inner > .mermaid,
+.card .card-content-inner svg { all: unset; }
+
+/* ========== Dark Mode (prefers-color-scheme: dark) ========== */
+@media (prefers-color-scheme: dark){
+.card{
+--paper:#0f1116; --ink:#e9edf2; --muted:#a7b0be; --rule:#2a2f3a; --accent:#8ab4ff;
+--code-bg:#121622; --code-border:#23293a;
+background:var(--paper); color:var(--ink); box-shadow:0 2px 12px rgba(0,0,0,.35);
+}
+.card .card-content-inner blockquote{
+border-left-color:#3a4b66;
+background: linear-gradient(90deg, rgba(58,75,102,.18), transparent 55%);
+}
+/* Booktabs lines switch to ink in dark mode to stay crisp */
+.card .card-content-inner thead tr:first-child th,
+.card .card-content-inner thead tr:first-child td{ border-top:2px solid var(--ink); }
+.card .card-content-inner thead tr:last-child th,
+.card .card-content-inner thead tr:last-child td{ border-bottom:1px solid var(--ink); }
+.card .card-content-inner tbody tr:last-child td{ border-bottom:2px solid var(--ink); }
+.card .card-content-inner tfoot td{ border-top:1px solid var(--ink); }
+.card .card-content-inner figure > img,
+.card .card-content-inner figure > video{ border:1px solid var(--rule); }
+}

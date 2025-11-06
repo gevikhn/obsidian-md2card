@@ -1,0 +1,197 @@
+/* ===== Clean & Readable – Knowledge Share Card (md2card) ===== */
+.card {
+  --bg: #fff;
+  --ink: #1f2328;
+  --muted: #6e7781;
+  --line: #d0d7de;
+  --soft: #f6f8fa;
+  --accent: #3b82f6;
+
+  background: var(--bg);
+  color: var(--ink);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(31,35,40,0.04), 0 8px 24px rgba(66,74,83,0.07);
+  overflow: hidden;
+  font: 400 16px/1.75 ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+        Roboto, "Helvetica Neue", "Microsoft YaHei", Arial, "Noto Sans", sans-serif;
+}
+
+/* Header/Footer: single thin gray line as decoration */
+.card-header {
+  border-bottom: 1px solid var(--line);
+  min-height: 10px; /* decorative strap */
+  background: linear-gradient(to bottom, rgba(0,0,0,0.02), transparent);
+}
+
+.card-footer {
+  border-top: 1px solid var(--line);
+  min-height: 10px; /* decorative strap */
+  background: linear-gradient(to top, rgba(0,0,0,0.02), transparent);
+}
+
+/* Content area */
+.card-content {
+  padding: 18px 20px 22px;
+}
+
+.card-content-inner {
+  max-width: 720px;     /* comfortable reading width */
+  margin: 0 auto;       /* center the text column */
+}
+
+/* Title: centered with a subtle gray segment underneath */
+.card-content-inner h1 {
+  margin: 2px 0 18px;
+  font-size: 24px;
+  line-height: 1.35;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: .2px;
+}
+
+.card-content-inner h1::after {
+  content: "";
+  display: block;
+  width: 72px;
+  height: 2px;
+  margin: 10px auto 0;
+  background: var(--line); /* gray line segment */
+  border-radius: 2px;
+}
+
+/* Subtitle */
+.card-content-inner h2 {
+  margin: 22px 0 10px;
+  font-size: 18px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--ink);
+  border-left: 3px solid var(--line);
+  padding-left: 10px;
+}
+
+/* Paragraphs & general spacing */
+.card-content-inner p {
+  margin: 10px 0;
+  color: var(--ink);
+}
+
+.card-content-inner strong { font-weight: 700; }
+.card-content-inner em { font-style: italic; }
+
+/* Lists */
+.card-content-inner ul,
+.card-content-inner ol {
+  padding-left: 1.2em;
+  margin: 8px 0 12px;
+}
+
+.card-content-inner li {
+  margin: 4px 0;
+}
+
+.card-content-inner ol li::marker { color: var(--muted); }
+.card-content-inner ul li { list-style: disc; }
+
+/* Blockquote */
+.card-content-inner blockquote {
+  margin: 14px 0;
+  padding: 10px 14px;
+  background: var(--soft);
+  border-left: 3px solid var(--line);
+  color: #2f363d;
+  border-radius: 8px;
+}
+
+/* Code (inline & block) */
+.card-content-inner code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: .1em .35em;
+  font-size: 85%;
+}
+
+.card-content-inner pre {
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 16px;
+  overflow: auto;
+  margin: 12px 0;
+}
+
+.card-content-inner pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: 90%;
+  line-height: 1.6;
+}
+
+/* Tables */
+.card-content-inner table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 15px;
+}
+
+.card-content-inner thead th {
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid var(--line);
+  padding: 8px 10px;
+  background: #fafbfc;
+}
+
+.card-content-inner td {
+  border-bottom: 1px solid var(--line);
+  padding: 8px 10px;
+}
+
+/* Images */
+.card-content-inner img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+  margin: 10px auto;
+  border: 1px solid var(--line);
+}
+
+/* Links */
+.card-content-inner a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(59,130,246,0.35);
+}
+
+.card-content-inner a:hover {
+  text-decoration: underline;
+}
+
+/* Horizontal rule */
+.card-content-inner hr {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 18px 0;
+}
+
+/* Small helpers */
+.card-content-inner .note,
+.card-content-inner .tip {
+  background: #f0f7ff;
+  border: 1px solid #cfe0fc;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #1e3a8a;
+  margin: 12px 0;
+}
+
+/* Reduce visual noise for very first paragraph (optional) */
+.card-content-inner > p:first-of-type {
+  margin-top: 6px;
+}

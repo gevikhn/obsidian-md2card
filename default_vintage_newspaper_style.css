@@ -1,0 +1,183 @@
+/* ========== 复古报纸 · Markdown 卡片（md2card.com）========== */
+/* 说明：所有排版样式仅作用于 .card-content-inner 的“直接子元素”，
+不影响 .mermaid 或 <svg> 中的任何节点（包括 foreignObject 内的 p）。 */
+
+/* 基础变量（不在祖先上设置全局字体，避免继承污染） */
+:root{
+--paper:#f6f1e6;
+--ink:#1f1a14;
+--ink-weak:#3a332b;
+--accent:#b5482a;
+--rule:#c9bca4;
+--shadow:rgba(0,0,0,.08);
+--mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Courier New", monospace;
+--serif: Georgia, "Times New Roman", Times, serif;
+}
+@media (prefers-color-scheme: dark){
+:root{
+--paper:#181614;
+--ink:#efe7d8;
+--ink-weak:#d7cdbb;
+--accent:#e06b52;
+--rule:#3c362e;
+--shadow:rgba(0,0,0,.6);
+}
+}
+
+/* 卡片外观（不设 font/color，避免影响后代的任何嵌入组件） */
+.card{
+background:
+radial-gradient(1200px 800px at 10% 10%, rgba(0,0,0,.05), transparent 60%),
+radial-gradient(800px 600px at 90% 20%, rgba(0,0,0,.04), transparent 60%),
+repeating-linear-gradient(0deg, rgba(0,0,0,.02) 0 2px, transparent 2px 4px),
+var(--paper);
+border:1px solid var(--rule);
+border-radius:6px;
+box-shadow:0 6px 18px var(--shadow);
+overflow:hidden;
+position:relative;
+padding:0;
+}
+
+/* 角标装饰 */
+.card::before,.card::after{
+content:""; position:absolute; width:14px; height:14px;
+background:linear-gradient(135deg, transparent 48%, var(--rule) 49% 51%, transparent 52%);
+opacity:.8; pointer-events:none;
+}
+.card::before{ top:-1px; left:-1px; transform:scaleX(-1); }
+.card::after{ bottom:-1px; right:-1px; transform:scaleY(-1); }
+
+/* 报头（不设容器字体，文案使用自身 font 声明） */
+.card-header{
+padding:14px 18px 10px;
+border-bottom:2px solid var(--ink);
+background:linear-gradient(0deg, transparent, rgba(0,0,0,.03));
+position:relative;
+}
+.card-header::before{
+content:"EDITION • MD NOTE";
+position:absolute; left:18px; top:8px;
+font:700 10px/1 var(--serif);
+letter-spacing:.18em;
+color:var(--accent);
+}
+
+/* 内容区容器（仅节奏行高，不设字体与颜色） */
+.card-content{ padding:0 18px 18px; }
+.card-content-inner{
+max-width:720px; margin:0 auto;
+font-size:15.5px; line-height:1.7; letter-spacing:.01em;
+}
+
+/* —— 排版仅作用于“直接子级”的 Markdown 元素 —— */
+.card-content-inner > h1,
+.card-content-inner > h2,
+.card-content-inner > h3,
+.card-content-inner > p,
+.card-content-inner > ol,
+.card-content-inner > ul,
+.card-content-inner > blockquote,
+.card-content-inner > pre,
+.card-content-inner > table,
+.card-content-inner > hr,
+.card-content-inner > figure{
+font-family: var(--serif);
+color: var(--ink);
+}
+
+/* 主标题（直接子级） */
+.card-content-inner > h1{
+margin:10px 0 6px;
+font: 900 28px/1.2 var(--serif);
+text-transform:uppercase;
+text-shadow:0 .75px 0 rgba(0,0,0,.06);
+border-bottom:1px solid var(--ink);
+padding-bottom:8px;
+}
+
+/* 副标题（直接子级） */
+.card-content-inner > h2{
+margin:8px 0 12px;
+font:700 16px/1.4 var(--serif);
+color:var(--ink-weak);
+font-variant: small-caps;
+}
+
+/* 段落（直接子级） */
+.card-content-inner > p{ margin:10px 0; text-align:justify; }
+
+/* ★ 关键修复：首字下沉仅限“直接子级段落”，不会命中 mermaid/foreignObject 内的 p */
+.card-content-inner > p:first-of-type::first-letter{
+font:900 44px/1 var(--serif);
+float:left; margin:.06em .14em 0 0; color:var(--ink);
+}
+
+/* 列表（列表项是列表的后代，不会触达 mermaid） */
+.card-content-inner > ol,
+.card-content-inner > ul{ margin:12px 0 12px 1.4em; padding:0; }
+.card-content-inner > ol{ list-style: decimal-leading-zero; }
+.card-content-inner > ol li,
+.card-content-inner > ul li{
+font-family: var(--serif);
+color: var(--ink);
+margin:.25em 0 .25em .2em;
+}
+
+/* 引用（直接子级） */
+.card-content-inner > blockquote{
+margin:14px 0; padding:10px 14px;
+border-left:4px solid var(--ink);
+background:rgba(0,0,0,.04);
+color:var(--ink-weak); font-style:italic;
+}
+
+/* 代码（直接子级） */
+.card-content-inner > code{ font-family: var(--mono); }
+.card-content-inner > pre{
+margin:12px 0; padding:12px 14px;
+border:1px solid var(--rule);
+background:repeating-linear-gradient(0deg, rgba(0,0,0,.05) 0 28px, rgba(0,0,0,.06) 28px 29px);
+border-radius:4px; overflow:auto;
+}
+.card-content-inner > pre code{
+display:block; border:none; background:transparent; padding:0;
+font-family: var(--mono); font-size:.95em; line-height:1.6;
+}
+
+/* 水平线/表格（直接子级） */
+.card-content-inner > hr{
+border:0; height:10px; margin:18px 0 14px;
+background:
+linear-gradient(var(--rule), var(--rule)) center/100% 1px no-repeat,
+repeating-linear-gradient(90deg, transparent 0 10px, rgba(0,0,0,.06) 10px 20px);
+}
+.card-content-inner > table{
+width:100%; border-collapse:collapse; margin:12px 0;
+font-family: var(--serif); color: var(--ink);
+}
+.card-content-inner > table th,
+.card-content-inner > table td{
+border:1px solid var(--rule); padding:8px 10px; text-align:left;
+}
+.card-content-inner > table th{
+background:rgba(0,0,0,.05); font-weight:800;
+}
+
+/* 页脚（独立，不作用到其他区域） */
+.card-footer{
+margin-top:6px; padding:10px 18px 14px;
+border-top:1px solid var(--rule);
+display:flex; justify-content:space-between; align-items:center;
+font:600 11px/1.6 var(--serif); color:var(--ink-weak); text-transform:uppercase;
+}
+.card-footer::before{ content:"— END —"; }
+.card-footer::after{ content:"PRINTED ON NEWS STOCK"; opacity:.85; }
+
+/* 小尺寸适配 */
+@media (max-width:520px){
+.card-content-inner{ font-size:15px; }
+.card-content-inner > h1{ font-size:24px; }
+.card-content-inner > h2{ font-size:15px; }
+.card-content-inner > p:first-of-type::first-letter{ font-size:40px; }
+}

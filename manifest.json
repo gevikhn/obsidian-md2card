@@ -4,7 +4,7 @@
   "version": "1.1.0",
   "minAppVersion": "0.15.0",
   "description": "Convert your markdown notes into beautiful card images with customizable themes",
-  "author": "MD2Card",
-  "authorUrl": "https://github.com/gevikhn/md2card",
+  "author": "gevikhn",
+  "authorUrl": "https://github.com/gevikhn/obsidian-md2card",
   "isDesktopOnly": false
 }

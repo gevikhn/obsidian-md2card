@@ -1,0 +1,276 @@
+/* md2card - "少数派风" Markdown 分享卡片（暗黑模式适配） */
+/* 仅CSS：可独立使用；自动跟随系统暗黑模式，同时支持 .dark 手动启用 */
+
+.card {
+/* 默认（亮色）变量，暗黑模式将覆盖 */
+--accent: #e9546b;
+--accent-weak: rgba(233, 84, 107, .18);
+--bg: #ffffff;
+--fg: #222222;
+--fg-muted: #636a73;
+--border: #ebedf0;
+--code-bg: #f6f8fa;
+--surface: #fafbfc;
+--shadow: 0 6px 24px rgba(17, 24, 39, .08), 0 2px 6px rgba(17, 24, 39, .04);
+
+background: var(--bg);
+color: var(--fg);
+border: 1px solid var(--border);
+border-radius: 16px;
+box-shadow: var(--shadow);
+overflow: hidden;
+font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
+"Noto Sans CJK SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+Inter, Roboto, Helvetica, Arial, system-ui, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* 头/尾 */
+.card-header,
+.card-footer {
+height: 12px;
+background:
+linear-gradient(90deg, var(--accent) 0 64px, transparent 64px 100%);
+border-bottom: 1px solid var(--border);
+}
+.card-footer {
+border-top: 1px solid var(--border);
+border-bottom: 0;
+background: linear-gradient(90deg, transparent 0 100%);
+}
+
+/* 内容容器 */
+.card-content { padding: 20px 24px 22px; }
+.card-content-inner {
+line-height: 1.75;
+font-size: 14.5px;
+letter-spacing: .1px;
+}
+
+/* 标题 */
+.card-content-inner h1 {
+position: relative;
+font-weight: 800;
+font-size: 22px;
+line-height: 1.35;
+margin: 0 0 12px 0;
+letter-spacing: .2px;
+padding-left: 14px;
+}
+.card-content-inner h1::before {
+content: "";
+position: absolute;
+left: 0;
+top: .2em;
+bottom: .2em;
+width: 4px;
+border-radius: 2px;
+background: var(--accent);
+}
+.card-content-inner h2 {
+font-weight: 700;
+font-size: 16px;
+margin: 18px 0 10px;
+color: #1f2328;
+padding-bottom: 6px;
+border-bottom: 2px solid var(--accent-weak);
+}
+
+/* 段落与文本 */
+.card-content-inner p { margin: 8px 0; color: var(--fg); }
+.card-content-inner p + p { margin-top: 10px; }
+.card-content-inner strong, .card-content-inner b { font-weight: 700; color: #1a1a1a; }
+.card-content-inner em, .card-content-inner i { font-style: italic; color: var(--fg-muted); }
+
+/* 链接 */
+.card-content-inner a {
+color: var(--accent);
+text-decoration: none;
+border-bottom: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
+}
+.card-content-inner a:hover { opacity: .95; border-bottom-color: var(--accent); }
+
+/* 列表 */
+.card-content-inner ul,
+.card-content-inner ol {
+margin: 8px 0 8px 1.2em;
+padding: 0;
+}
+.card-content-inner li { margin: 6px 0; }
+.card-content-inner ol {
+counter-reset: sspai-ol;
+list-style: none;
+margin-left: .4em;
+}
+.card-content-inner ol > li {
+counter-increment: sspai-ol;
+position: relative;
+padding-left: 1.6em;
+}
+.card-content-inner ol > li::before {
+content: counter(sspai-ol) ".";
+position: absolute;
+left: 0;
+top: 0;
+color: var(--accent);
+font-weight: 700;
+width: 1.4em;
+text-align: right;
+}
+
+/* 引用 */
+.card-content-inner blockquote {
+margin: 10px 0;
+padding: 10px 12px;
+border-left: 4px solid var(--accent);
+background: linear-gradient(0deg, color-mix(in srgb, var(--accent) 10%, transparent), color-mix(in srgb, var(--accent) 10%, transparent));
+color: #373c42;
+border-radius: 6px;
+}
+
+/* 代码 */
+.card-content-inner code {
+font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+font-size: .92em;
+background: var(--code-bg);
+border: 1px solid #e1e4e8;
+padding: .12em .38em;
+border-radius: 5px;
+}
+.card-content-inner pre {
+background: var(--code-bg);
+border: 1px solid #e1e4e8;
+border-radius: 10px;
+padding: 12px 14px;
+overflow: auto;
+line-height: 1.6;
+margin: 10px 0;
+}
+.card-content-inner pre code {
+background: transparent;
+border: 0;
+padding: 0;
+font-size: .95em;
+}
+
+/* 表格 */
+.card-content-inner table {
+width: 100%;
+border-collapse: collapse;
+margin: 10px 0;
+font-size: 14px;
+}
+.card-content-inner th,
+.card-content-inner td {
+border: 1px solid var(--border);
+padding: 8px 10px;
+}
+.card-content-inner th {
+background: var(--surface);
+text-align: left;
+font-weight: 700;
+}
+
+/* 分割线 */
+.card-content-inner hr {
+height: 1px;
+border: 0;
+background: var(--border);
+margin: 14px 0;
+}
+
+/* ========== 自动暗黑模式（系统偏好） ========== */
+@media (prefers-color-scheme: dark) {
+.card {
+--accent: #ff6b88;
+--accent-weak: rgba(255, 107, 136, .28);
+--bg: #0d1117;           /* 近 GitHub 暗色基底 */
+--fg: #e6edf3;           /* 高对比正文 */
+--fg-muted: #9aa8b3;     /* 次要文本 */
+--border: #262b33;       /* 低对比描边 */
+--code-bg: #0b1220;      /* 稍亮的代码底 */
+--surface: #0f141b;      /* 表头/浮层 */
+--shadow: 0 0 0 1px rgba(255,255,255,.03) inset, 0 12px 32px rgba(0,0,0,.45);
+background: var(--bg);
+color: var(--fg);
+border-color: var(--border);
+box-shadow: var(--shadow);
+}
+
+.card-content-inner h2 { color: #f0f3f6; }
+.card-content-inner strong, .card-content-inner b { color: #f6f8fa; }
+.card-content-inner em, .card-content-inner i { color: var(--fg-muted); }
+
+.card-header, .card-footer {
+border-color: var(--border);
+background:
+linear-gradient(90deg, var(--accent) 0 64px, transparent 64px 100%);
+}
+.card-footer { background: linear-gradient(90deg, transparent 0 100%); }
+
+.card-content-inner blockquote {
+color: #c7d1db;
+background: linear-gradient(0deg, color-mix(in srgb, var(--accent) 14%, transparent), color-mix(in srgb, var(--accent) 14%, transparent));
+}
+
+.card-content-inner code {
+border-color: #1f2630;
+}
+.card-content-inner pre {
+border-color: #1f2630;
+}
+
+.card-content-inner th { background: #0f141b; }
+.card-content-inner td, .card-content-inner th { border-color: var(--border); }
+
+.card-content-inner hr { background: var(--border); }
+
+/* 链接在暗色下的可访问对比 */
+.card-content-inner a {
+color: var(--accent);
+border-bottom-color: color-mix(in srgb, var(--accent) 45%, transparent);
+}
+.card-content-inner a:hover { opacity: .92; }
+}
+
+/* ========== 手动暗黑模式：给根节点或任意祖先加 .dark ========== */
+.dark .card {
+--accent: #ff6b88;
+--accent-weak: rgba(255, 107, 136, .28);
+--bg: #0d1117;
+--fg: #e6edf3;
+--fg-muted: #9aa8b3;
+--border: #262b33;
+--code-bg: #0b1220;
+--surface: #0f141b;
+--shadow: 0 0 0 1px rgba(255,255,255,.03) inset, 0 12px 32px rgba(0,0,0,.45);
+background: var(--bg);
+color: var(--fg);
+border-color: var(--border);
+box-shadow: var(--shadow);
+}
+.dark .card-content-inner h2 { color: #f0f3f6; }
+.dark .card-content-inner strong, .dark .card-content-inner b { color: #f6f8fa; }
+.dark .card-content-inner em, .dark .card-content-inner i { color: var(--fg-muted); }
+.dark .card-header, .dark .card-footer {
+border-color: var(--border);
+background: linear-gradient(90deg, var(--accent) 0 64px, transparent 64px 100%);
+}
+.dark .card-footer { background: linear-gradient(90deg, transparent 0 100%); }
+.dark .card-content-inner blockquote {
+color: #c7d1db;
+background: linear-gradient(0deg, color-mix(in srgb, var(--accent) 14%, transparent), color-mix(in srgb, var(--accent) 14%, transparent));
+}
+.dark .card-content-inner code,
+.dark .card-content-inner pre { border-color: #1f2630; }
+.dark .card-content-inner th { background: #0f141b; }
+.dark .card-content-inner td,
+.dark .card-content-inner th { border-color: var(--border); }
+.dark .card-content-inner hr { background: var(--border); }
+
+/* 移动端微调 */
+@media (max-width: 420px) {
+.card-content { padding: 18px 16px 20px; }
+.card-content-inner { font-size: 14px; }
+.card-content-inner h1 { font-size: 20px; }
+.card-content-inner h2 { font-size: 15px; }
+}

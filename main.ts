@@ -1,5 +1,10 @@
 import { App, Component, Editor, EventRef, MarkdownRenderer, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile } from 'obsidian';
 import * as htmlToImage from 'html-to-image';
+import defaultCardThemeCss from './default_card_theme.css';
+import defaultGithubStyleCss from './default_github_style.css';
+import defaultPieStyleCss from './default_pie_style.css';
+import defaultLatexStyleCss from './default_latex_style.css';
+import defaultVintageNewspaperStyleCss from './default_vintage_newspaper_style.css';
 
 type MermaidAPI = {
   initialize: (config: unknown) => void;
@@ -37,12 +42,15 @@ interface MD2CardSettings {
   exportQuality: number;
 }
 
-const BUILT_IN_THEMES = ['默认', '暗黑', '玻璃', '温暖'] as const;
+const BUILT_IN_THEMES = ['默认', 'GitHub', '玻璃', '温暖', 'PI', 'LaTeX', '复古报纸'] as const;
 const BUILT_IN_THEME_LABELS: Record<(typeof BUILT_IN_THEMES)[number], string> = {
-  '默认': 'Default (Pop)',
-  '暗黑': 'Dark',
+  '默认': 'Default (Clean)',
+  'GitHub': 'GitHub',
   '玻璃': 'Glass',
-  '温暖': 'Warm'
+  '温暖': 'Warm',
+  'PI': 'Palette Pie',
+  'LaTeX': 'LaTeX Journal',
+  '复古报纸': 'Vintage Newspaper'
 };
 
 const DEFAULT_SETTINGS: MD2CardSettings = {
@@ -800,6 +808,13 @@ class CardPreviewModal extends Modal {
         customCSS = customTheme.css;
       }
     }
+    let builtInThemeCSS = '';
+    if (!this.currentTheme.startsWith('custom:')) {
+      const themeStyles = this.getThemeStyles(this.currentTheme);
+      if (themeStyles.css) {
+        builtInThemeCSS = themeStyles.css;
+      }
+    }
     
     style.textContent = `
       .card {
@@ -858,6 +873,7 @@ class CardPreviewModal extends Modal {
       .katex {
         font-size: 1em;
       }
+      ${builtInThemeCSS}
       ${customCSS}
     `;
     container.appendChild(style);
@@ -872,7 +888,9 @@ class CardPreviewModal extends Modal {
       // Custom themes rely on user-supplied CSS, so no inline styling here
     } else {
       const themeStyles = this.getThemeStyles(themeName);
-      cardEl.setAttr('style', themeStyles.container);
+      if (themeStyles.container) {
+        cardEl.setAttr('style', themeStyles.container);
+      }
 
       if (themeStyles.afterElement) {
         cardEl.insertAdjacentHTML('afterbegin', themeStyles.afterElement);
@@ -881,7 +899,9 @@ class CardPreviewModal extends Modal {
         cardEl.insertAdjacentHTML('afterbegin', themeStyles.beforeElement);
       }
 
-      contentStyles = themeStyles.content;
+      if (themeStyles.content) {
+        contentStyles = themeStyles.content;
+      }
     }
 
     const headerEl = cardEl.createDiv({ cls: 'card-header' });
@@ -1038,69 +1058,13 @@ class CardPreviewModal extends Modal {
     block.replaceWith(fallback);
   }
 
-  getThemeStyles(themeName: string): any {
-    const themes: Record<string, any> = {
+  getThemeStyles(themeName: string): { container?: string; content?: string; beforeElement?: string; afterElement?: string; css?: string } {
+    const themes: Record<string, { container?: string; content?: string; beforeElement?: string; afterElement?: string; css?: string }> = {
       '默认': {
-        container: `
-          position: relative;
-          border-radius: 8px;
-          padding: 16px;
-          background-color: #ffeb3b;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-          background-image: radial-gradient(circle, rgba(255, 255, 255, 0.2) 2px, transparent 2px);
-          background-size: 20px 20px;
-        `,
-        beforeElement: `<div style="
-          position: absolute;
-          top: -15px;
-          left: -15px;
-          width: 50px;
-          height: 50px;
-          background: #ff4081;
-          clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-          z-index: 1;
-        "></div>`,
-        afterElement: `<div style="
-          position: absolute;
-          top: -10px;
-          right: -10px;
-          width: 50px;
-          height: 50px;
-          background: #2196f3;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-weight: bold;
-          font-size: 14px;
-          z-index: 1;
-        ">POP!</div>`,
-        content: `
-          border-radius: 10px;
-          padding: 20px;
-          backdrop-filter: blur(10px);
-          box-shadow: -1px -1px 5px 1px rgba(255, 255, 255, 0.5);
-          background-color: rgba(255, 255, 255, 0.1);
-          min-height: 100%;
-        `
+        css: defaultCardThemeCss
       },
-      '暗黑': {
-        container: `
-          position: relative;
-          border-radius: 12px;
-          padding: 20px;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        `,
-        content: `
-          border-radius: 8px;
-          padding: 24px;
-          background: rgba(0, 0, 0, 0.3);
-          backdrop-filter: blur(10px);
-          color: #ffffff;
-          min-height: 100%;
-        `
+      'GitHub': {
+        css: defaultGithubStyleCss
       },
       '玻璃': {
         container: `
@@ -1134,6 +1098,15 @@ class CardPreviewModal extends Modal {
           backdrop-filter: blur(10px);
           min-height: 100%;
         `
+      },
+      'PI': {
+        css: defaultPieStyleCss
+      },
+      'LaTeX': {
+        css: defaultLatexStyleCss
+      },
+      '复古报纸': {
+        css: defaultVintageNewspaperStyleCss
       }
     };
 
