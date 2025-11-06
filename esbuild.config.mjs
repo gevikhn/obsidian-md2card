@@ -78,7 +78,7 @@ const context = await esbuild.context({
 	logLevel: "info",
 	sourcemap: prod ? false : "inline",
         treeShaking: true,
-        outfile: "bin/main.js",
+        outfile: "main.js",
         loader: {
                 '.ttf': 'dataurl',
                 '.woff': 'dataurl',

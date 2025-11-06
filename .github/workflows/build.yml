@@ -1,0 +1,55 @@
+name: Build Plugin
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build plugin
+        run: npm run build:plugin
+
+      - name: Verify build files
+        run: |
+          if [ ! -f main.js ]; then
+            echo "Error: main.js not found"
+            exit 1
+          fi
+          if [ ! -f manifest.json ]; then
+            echo "Error: manifest.json not found"
+            exit 1
+          fi
+          if [ ! -f versions.json ]; then
+            echo "Error: versions.json not found"
+            exit 1
+          fi
+          echo "✅ Build successful - all required files generated"
+          ls -lh main.js manifest.json versions.json
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-build
+          path: |
+            main.js
+            manifest.json
+            versions.json
+          retention-days: 7
